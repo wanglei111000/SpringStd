@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class CarController {
     @Autowired
-    @Qualifier("carService")
+    //@Qualifier("carService")
     //当有多个 实例对象被创建的时候 可以使用 @Qualifier 来指定不同的名称
     //根据指定名称来匹配，不使用默认的 根据类的变量名来装配
     //找到就装配 ，找不到就会报错
