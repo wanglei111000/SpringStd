@@ -19,7 +19,13 @@
 @Component     不属于以上几种的
 @Scope("prototype")  这只作用域范围
 @Autowired       自动装配
-@Qualifier("carService")
+@Qualifier("carService")  可以使用在成员属性 和方法参数的位置
+
+@Inject ejb 环境下使用的
+@Resource  和 @Autowired  的区别
+@Resource   是JDK 自带的没有 required属性，是标准 扩展性更强
+@Autowired  是spring 提供的，不能脱离spring 容器
+
  -->
 
 <!--
