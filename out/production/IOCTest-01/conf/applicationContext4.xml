@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+    <!-- 读去配置文件的方式来获取数据库配置信息 并且链接数据库 -->
+    <context:property-placeholder location="classpath:/conf/db.properties"></context:property-placeholder>
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+      <!-- ${jdbc.userName}  对应的properties 文件中的key 不能为username 因为username是spring的一个属性 -->
+      <property name="user" value="${jdbc.userName}"></property>
+      <property name="password" value="${jdbc.password}"></property>
+      <property name="jdbcUrl" value="${jdbc.url}"></property>
+      <property name="driverClass" value="${jdbc.driverClass}"></property>
+    </bean>
+
+</beans>

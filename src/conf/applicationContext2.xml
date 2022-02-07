@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+    <!---  xmlns:util="http://www.springframework.org/schema/util"
+    util  名称空间 创建集合类型的bean 方便其他地方引用
+    -->
+    <!--  发生如下异常
+    org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException: Line 85 in XML document from class path resource [conf/applicationContext2.xml] is invalid; nested exception is org.xml.sax.SAXParseException; lineNumber: 85; columnNumber: 26; cvc-complex-type.2.4.c: 通配符的匹配很全面, 但无法找到元素 'util:map' 的声明。
+    原因是 beans 的 申明头文件中xsi.schemaLocation 缺util 的声明 加上之后报错问题解决
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+    -->
+    <!-- 测试 null 不赋值 -->
+    <bean id="person07" class="com.sp.std.beans.Person">
+        <!-- 将属性设置为 null值 非 null 字符串 -->
+        <property name="name">
+            <null></null>
+        </property>
+        <!-- ref 引用外部的一个 car 对象 -->
+        <!--
+        <property name="car" ref="car01"></property>
+        -->
+        <!-- 引用内部bean -->
+        <property name="car">
+            <!-- 内部bean 不能根据id 获取到 -->
+            <bean id="car01" class="com.sp.std.beans.Car">
+                <property name="carName" value="BMW"></property>
+                <property name="color" value="yellow"></property>
+                <property name="price" value="100000000"></property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="car01" class="com.sp.std.beans.Car">
+        <property name="carName" value="BMW"></property>
+        <property name="color" value="yellow"></property>
+        <property name="price" value="100000000"></property>
+    </bean>
+
+    <!-- 为对象的 list 赋值 -->
+    <bean id="person08" class="com.sp.std.beans.Person">
+        <property name="books">
+            <list>
+                <bean id="book0001" class="com.sp.std.beans.Book" p:author="hh" p:bookName="kk" ></bean>
+                <ref bean="book01"></ref>
+            </list>
+        </property>
+
+        <property name="maps">
+            <map>
+              <entry key="001" value="zhangsan"></entry>
+              <entry key="002" value="18"></entry>
+              <entry key="003" value-ref="car01"></entry>  <!-- 引用外部对象 -->
+              <!-- 在内部直接使用 -->
+              <entry key="004">
+                  <bean id="car001" class="com.sp.std.beans.Car">
+                      <property name="price" value="100"></property>
+                      <property name="color" value="green"></property>
+                      <property name="carName" value="mini"></property>
+                  </bean>
+              </entry>
+            </map>
+        </property>
+
+        <property name="properties">
+            <!-- k,v 都只能是 String 类型 -->
+            <props>
+                <prop key="p01">root</prop>
+                <prop key="p02">w1234www</prop>
+            </props>
+        </property>
+
+    </bean>
+
+    <bean id="book01" class="com.sp.std.beans.Book">
+        <property name="author" value="liqingzhao"></property>
+        <property name="bookName" value="xijiangyue"></property>
+    </bean>
+
+
+
+    <!-- 测试 util 名称空间 -->
+    <bean id="person09" class="com.sp.std.beans.Person">
+        <property name="maps" ref="myMap"></property>
+    </bean>
+    <util:map id="myMap">
+        <entry key="001" value="zhangsan"></entry>
+        <entry key="002" value="18"></entry>
+        <entry key="003" value-ref="car01"></entry>  <!-- 引用外部对象 -->
+        <!-- 在内部直接使用 -->
+        <entry key="004">
+            <bean id="car001" class="com.sp.std.beans.Car">
+                <property name="price" value="100"></property>
+                <property name="color" value="green"></property>
+                <property name="carName" value="mini"></property>
+            </bean>
+        </entry>
+    </util:map>
+
+    <!-- list 案例 -->
+    <util:list id="myList">
+        <list></list>
+        <bean class="com.sp.std.beans.Person"></bean>
+        <value>100</value>
+        <ref bean="myMap"></ref>
+    </util:list>
+
+
+    <!-- 级联属性测试 -->
+    <bean id="person10" class="com.sp.std.beans.Person">
+        <property name="car" ref="car01"></property>
+        <property name="car.price" value="19999000"></property>
+    </bean>
+
+    <!--  测试继承 parent  属性继承-->
+    <bean id="person11" class="com.sp.std.beans.Person" parent="person10">
+        <property name="id" value="11"></property>
+        <property name="name" value="你好"></property>
+    </bean>
+
+
+    <!--  抽象类 只能被继承 ，不能直接获取 -->
+    <bean id="person12" class="com.sp.std.beans.Person" abstract="true">
+        <property name="car" ref="car01"></property>
+        <property name="car.price" value="19999000"></property>
+    </bean>
+
+</beans>

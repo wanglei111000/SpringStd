@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+    <!-- 测试依赖  默认情况下 类的创建顺序和配置文件中的顺序一致
+    加了depends-on 属性之后 对象会在其depends-on 的对象创建完成之后创建
+    -->
+    <!--
+    <bean id="person01" class="com.sp.std.beans.Person" depends-on="car01,book01">
+
+    </bean>
+
+    <bean id="book01" class="com.sp.std.beans.Book">
+
+    </bean>
+
+    <bean id="car01" class="com.sp.std.beans.Car">
+
+    </bean>
+    -->
+
+    <!-- 测试作用域 scope
+      prototype   多实例  在获取bean 的时候 创建对象
+      singleton   单实例  默认就是单实例 在容器启动完成之前创建完成
+      request     与web 相关  同一次请求的内容可以放在 请求域 或者session 域中 ，所以这里基本不适用
+      session     与web 相关  同一次请求的内容可以放在 请求域 或者session 域中 ，所以这里基本不适用
+     -->
+    <bean id="car01" class="com.sp.std.beans.Car" scope="singleton">
+
+    </bean>
+
+    <!-- 测试 静态工厂类创建对象 -->
+    <bean id="car001" class="com.sp.std.beans.CarStaticFactory" factory-method="createCar">
+        <constructor-arg name="carName" value="BMW"></constructor-arg>
+    </bean>
+    <!-- 测试 实例工厂类创建对象 -->
+    <bean id="carInstanceFactory" class="com.sp.std.beans.CarInstanceFactory">
+    </bean>
+    <bean id="car002" class="com.sp.std.beans.Car" factory-bean="carInstanceFactory" factory-method="createCar">
+        <constructor-arg name="carName" value="Benz"></constructor-arg>
+    </bean>
+
+
+  <!--  FactoryBean 测试 -->
+    <bean id="myFactoryBean" class="com.sp.std.beans.MyFactoryBean"></bean>
+  <!-- 带生命周期的 bean
+       单例：bean在容器创建完成的时候创建，容器关闭的时候销毁 bean
+       多例：bean 会在获取的时候创建
+       我们可以定义一些方法来在spring容器创建或者销毁的时候调用
+  -->
+    <!--
+    自定义初始化 和销毁方法 ，方法不能有参数 ，但是 可以抛出异常
+    -->
+    <bean id="book01" class="com.sp.std.beans.Book" destroy-method="myDestroy" init-method="myInit"></bean>
+
+    <!-- 后置处理器测试 -->
+    <bean id="myProcessor" class="com.sp.std.beans.MyPostProcessor"></bean>
+</beans>

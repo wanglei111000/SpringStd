@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="person01" class="com.sp.std.beans.Person">
+        <property name="id" value="001"></property>
+        <property name="age" value="11"></property>
+        <property name="name" value="haha"></property>
+    </bean>
+
+
+    <bean id="person02" class="com.sp.std.beans.Person">
+        <property name="id" value="002"></property>
+        <property name="age" value="12"></property>
+        <property name="name" value="hah2"></property>
+    </bean>
+
+    <!-- 构造器创建对象  可以省略name 属性 需要保持  和 对象有参构造器的参数顺序 一致
+        如果省略了之后 也还是 不改 顺序  ，还可以添加 index 属性来指定 参数顺序
+        锐减使用 name + value 这种
+    -->
+    <bean id="person03" class="com.sp.std.beans.Person">
+        <constructor-arg value="003" name="id"></constructor-arg>
+        <constructor-arg value="10" name="age"></constructor-arg>
+        <constructor-arg value="xiaoming" name="name"></constructor-arg>
+    </bean>
+
+    <!-- 指定构造的参数顺序 -->
+    <bean id="person04" class="com.sp.std.beans.Person">
+        <constructor-arg value="10" index="1" type="java.lang.String"></constructor-arg>
+        <constructor-arg value="003" index="0"></constructor-arg>
+        <constructor-arg value="xiaoming" index="2"></constructor-arg>
+    </bean>
+
+    <!-- 指定构造的参数顺序 以及类型 ，当有相同参数个数的时候，可以指定对应顺序参数的类型
+     来匹配对应的构造方法 -->
+    <bean id="person05" class="com.sp.std.beans.Person">
+        <constructor-arg value="10" index="1" type="java.lang.Integer"></constructor-arg>
+        <constructor-arg value="003" index="0"></constructor-arg>
+        <constructor-arg value="xiaoming" index="2"></constructor-arg>
+    </bean>
+
+    <!-- 名称空间 用来防止 标签重复 -->
+
+    <!--    在beans 标签中添加 p 名称空间和context的名称空间 然后 再来使用名称空间
+    的方式 来创建对象
+            xmlns:context="http://www.springframework.org/schema/context"
+           xmlns:p="http://www.springframework.org/schema/p"
+     -->
+    <bean id="person06" class="com.sp.std.beans.Person"
+          p:id="006" p:age="20" p:name="杨幂" p:email="hhhh@123.com"></bean>
+
+</beans>

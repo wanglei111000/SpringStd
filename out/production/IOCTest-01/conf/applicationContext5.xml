@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+    <!-- 自动装配 -->
+    <!--
+    autowire="default/no" 默认情况下不会自动装配
+    autowire="byName"  //根据类属性名 装配类
+                        类似:ioc.getBean("car")  查找id = "car"
+                        private Car car  ,  如果xml配置中没有 id为 car的bean 配置 那么将会自动装配null
+                        有 id为 car的配置 则会自动装配上
+    autowire="byType"  //根据类名 装配
+                       类似:ioc.getBean(Car.class)
+                       如果有多个关于car 的配置 则会报错
+                       org.springframework.beans.factory.UnsatisfiedDependencyException:
+                       Error creating bean with name 'person01' defined in class path resource
+                       [conf/applicationContext5.xml]: Unsatisfied dependency expressed through
+                       bean property 'car': : No qualifying bean of type [com.sp.std.beans.Car]
+                       is defined: expected single matching bean but found 3:
+                       car01,car02,car; nested exception is
+                       org.springframework.beans.factory.NoUniqueBeanDefinitionException:
+                       No qualifying bean of type [com.sp.std.beans.Car] is defined:
+                       expected single matching bean but found 3: car01,car02,car
+
+    autowire="constructor"  //根据有参构造器装配
+    如果构造器存在 则会自动装配
+    如果构造器不存在 ，会根据 private Car car  属性名去找，如果在xml中存在id 为 car 的则会自动装配
+    不存在则 装配 null
+    如果存在多个存在 id为 car的则装配 , 不存在id为 car 则装配null
+
+    -->
+    <bean id="person01" class="com.sp.std.beans.Person">
+        <property name="id" value="001"></property>
+        <property name="age" value="11"></property>
+        <property name="name" value="haha"></property>
+        <!--<property name="car" ref="car"></property>-->  <!-- 手动装配 -->
+    </bean>
+
+    <bean id="car" class="com.sp.std.beans.Car">
+        <property name="carName" value="BMW01"></property>
+        <property name="color" value="yellow"></property>
+        <property name="price" value="100000000"></property>
+    </bean>
+
+    <!--
+        <bean id="car02" class="com.sp.std.beans.Car">
+            <property name="carName" value="BMW"></property>
+            <property name="color" value="yellow"></property>
+            <property name="price" value="100000000"></property>
+        </bean>
+
+            <bean id="car" class="com.sp.std.beans.Car">
+                <property name="carName" value="BMW"></property>
+                <property name="color" value="yellow"></property>
+                <property name="price" value="100000000"></property>
+            </bean>
+            -->
+
+    <!--  测试 SpEL 表达式 -->
+    <bean id="person002" class="com.sp.std.beans.Person">
+        <!--  字面量 ${} 或者 #{}  -->
+        <property name="age" value="#{10*2}"></property>
+        <!-- 调用其他对象的属性 -->
+        <property name="name" value="#{person01.name}"></property>
+        <!--  引用其他bean  类似于 ref -->
+        <property name="car" value="#{car}"></property>
+        <!-- 调用静态方法 语法 T(类全路径名).静态方法  -->
+        <property name="email" value="#{T(java.util.UUID).randomUUID().toString().substring(0,8)}"></property>
+        <!-- 调用非静态方法 -->
+        <property name="address" value="#{car.getColor()}"></property>
+    </bean>
+
+</beans>
