@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+<!-- 注解扫描包路径 , 在基础包及其子包下的 类只要添加了 注解的类都会会被 添加到容器中
+     注解一定需要aop 的包
+     组件的作用域 默认是单例的
+-->
+<!--  常用注解 推荐使用
+@Controller   controller 层
+@Service      service 层
+@Repository   dao层
+@Component     不属于以上几种的
+@Scope("prototype")  这只作用域范围
+@Autowired       自动装配
+@Qualifier("carService")
+ -->
+
+<!--
+指定扫描的时候排除哪些组件 或者包含哪些组件
+-->
+
+    <context:component-scan base-package="com.sp.std">
+         <!-- 指定排除规则 如 按注解排除 type="annotation"  (常用)
+         其他
+         type="aspectj"      根据 aspectj  表达式来用
+         type="assignable"   指定类  (常用)
+         type="custom"       按照自己自定义的typeFilter 的match 方法 来决定那些类需要
+         type="regex"        按正则表达式
+         -->
+         <!--
+         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+         -->
+
+        <!-- 指定需要扫描的   我得版本里面 没有 这个 use-default-filter 的属性了 低版本的需要设置这个属性为true-->
+        <!--
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        -->
+    </context:component-scan>
+
+
+</beans>
